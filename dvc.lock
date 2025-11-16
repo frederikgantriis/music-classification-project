@@ -13,3 +13,51 @@ stages:
       md5: c53b51bf588447f2042acc579a5e1c5a.dir
       size: 1407008328
       nfiles: 2001
+  transform:
+    cmd: python src/transform.py
+    deps:
+    - path: raw-data
+      hash: md5
+      md5: c53b51bf588447f2042acc579a5e1c5a.dir
+      size: 1407008328
+      nfiles: 2001
+    - path: src/transform.py
+      hash: md5
+      md5: 33a6c2eaac5a9b4bd9ab72304662137b
+      size: 1297
+    outs:
+    - path: transformed_data
+      hash: md5
+      md5: aefa46ccea8f1637351cca4022d1e945.dir
+      size: 1138825
+      nfiles: 4
+  train:
+    cmd: python src/train.py
+    deps:
+    - path: src/train.py
+      hash: md5
+      md5: e05b7f5764c5218b3689e3cf51a13d89
+      size: 560
+    - path: transformed_data
+      hash: md5
+      md5: aefa46ccea8f1637351cca4022d1e945.dir
+      size: 1138825
+      nfiles: 4
+    outs:
+    - path: models
+      hash: md5
+      md5: 4267fd2da594681afbf0ff36393b5f28.dir
+      size: 981285
+      nfiles: 1
+  evaluate:
+    cmd: python src/evaluate.py
+    deps:
+    - path: models
+      hash: md5
+      md5: 4267fd2da594681afbf0ff36393b5f28.dir
+      size: 981285
+      nfiles: 1
+    - path: src/evaluate.py
+      hash: md5
+      md5: f8a685754903f1fb80d996098bce5d6f
+      size: 841

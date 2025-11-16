@@ -2,7 +2,7 @@ stages:
   prepare:
     cmd: source src/prepare.sh
     deps:
-    - src/prepare.sh 
+    - src/prepare.sh
     outs:
     - raw-data
   transform:
@@ -24,3 +24,8 @@ stages:
     deps:
     - models
     - src/evaluate.py
+metrics:
+- eval/metrics.json
+plots:
+- eval/plots/metrics:
+    x: step
