@@ -1,0 +1,15 @@
+schema: '2.0'
+stages:
+  prepare:
+    cmd: source src/prepare.sh
+    deps:
+    - path: src/prepare.sh
+      hash: md5
+      md5: 20bcc21a266d984c2f3f4884d58635b9
+      size: 281
+    outs:
+    - path: raw-data
+      hash: md5
+      md5: c53b51bf588447f2042acc579a5e1c5a.dir
+      size: 1407008328
+      nfiles: 2001

@@ -1,17 +1,21 @@
 stages:
   prepare:
-    cmd: python src/prepare.py
+    cmd: source src/prepare.sh
+    deps:
+    - src/prepare.sh 
     outs:
-    - prepared_data
+    - raw-data
   transform:
     cmd: python src/transform.py
     deps:
-    - prepared_data
+    - src/transform.py
+    - raw-data
     outs:
     - transformed_data
   train:
     cmd: python src/train.py
     deps:
+    - src/train.py
     - transformed_data
     outs:
     - models
@@ -19,3 +23,4 @@ stages:
     cmd: python src/evaluate.py
     deps:
     - models
+    - src/evaluate.py
