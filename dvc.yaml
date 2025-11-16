@@ -1,0 +1,21 @@
+stages:
+  prepare:
+    cmd: python src/prepare.py
+    outs:
+    - prepared_data
+  transform:
+    cmd: python src/transform.py
+    deps:
+    - prepared_data
+    outs:
+    - transformed_data
+  train:
+    cmd: python src/train.py
+    deps:
+    - transformed_data
+    outs:
+    - models
+  evaluate:
+    cmd: python src/evaluate.py
+    deps:
+    - models
