@@ -4,5 +4,4 @@ transform:
   n_mels: 64
   stride: 5
 train:
-  example: 10
-  model_name: GRU
+  model_name: LSTM

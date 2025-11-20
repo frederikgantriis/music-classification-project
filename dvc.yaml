@@ -7,6 +7,11 @@ stages:
     - raw-data
   transform:
     cmd: python src/transform.py
+    params:
+    - transform.test_size
+    - transform.seq_length
+    - transform.n_mels
+    - transform.stride
     deps:
     - src/transform.py
     - raw-data
@@ -17,6 +22,8 @@ stages:
     - dict
   train:
     cmd: python src/train.py
+    params:
+    - train.model_name
     deps:
     - src/train.py
     - transformed_data
