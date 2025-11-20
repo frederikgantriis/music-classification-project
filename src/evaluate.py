@@ -1,7 +1,7 @@
 from dvclive.live import Live
 import os
 import pandas as pd
-from sklearn.metrics import accuracy_score, precision_score, f1_score, confusion_matrix
+from sklearn.metrics import accuracy_score, precision_score, f1_score, confusion_matrix, recall_score
 from tensorflow.keras.models import load_model
 from dvc.api import params_show
 import numpy as np
@@ -49,7 +49,9 @@ def main():
     with Live("eval") as live:
         live.log_metric("accuracy", accuracy_score(y, prediction))
         live.log_metric("precision", precision_score(
-            y, prediction, average="micro"))
+            y, prediction, average="macro"))
+        live.log_metric("F1 Score", f1_score(y, prediction, average="macro"))
+        live.log_metric("recall", recall_score(y, prediction, average="macro"))
         live.log_image("confusion_matrix.png", plt.gcf())
 
 

@@ -27,6 +27,8 @@ stages:
     deps:
     - models
     - src/evaluate.py
+    outs:
+    - eval/
 metrics:
 - eval/metrics.json
 plots:
