@@ -28,7 +28,7 @@ stages:
     params:
       params.yaml:
         transform.n_mels: 64
-        transform.seq_length: 25
+        transform.seq_length: 50
         transform.stride: 5
         transform.test_size: 0.3
     outs:
@@ -44,12 +44,12 @@ stages:
       nfiles: 0
     - path: sequences
       hash: md5
-      md5: 072ccbeaee5e1a21f29743189f417bfa.dir
-      size: 2373485411
+      md5: 3b691510893b78e1227bd673d6983dc9.dir
+      size: 4682658124
       nfiles: 2
     - path: transformed_data
       hash: md5
-      md5: 30c4af736c24d5afa0a406c424bfbdf0.dir
+      md5: c1cff220d57026379a52478a0bafebb8.dir
       size: 1323989016
       nfiles: 1000
   train:
@@ -61,25 +61,25 @@ stages:
       size: 3058
     - path: transformed_data
       hash: md5
-      md5: 30c4af736c24d5afa0a406c424bfbdf0.dir
+      md5: c1cff220d57026379a52478a0bafebb8.dir
       size: 1323989016
       nfiles: 1000
     params:
       params.yaml:
-        train.model_name: LSTM
+        train.model_name: GRU
     outs:
     - path: models
       hash: md5
-      md5: 3edab4f28d11e2b15feb985ec7ada90d.dir
-      size: 454237
+      md5: 596559a6e0e28929ddbca42e9678f9c8.dir
+      size: 357462
       nfiles: 1
   evaluate:
     cmd: python src/evaluate.py
     deps:
     - path: models
       hash: md5
-      md5: 3edab4f28d11e2b15feb985ec7ada90d.dir
-      size: 454237
+      md5: 596559a6e0e28929ddbca42e9678f9c8.dir
+      size: 357462
       nfiles: 1
     - path: src/evaluate.py
       hash: md5
@@ -88,6 +88,24 @@ stages:
     outs:
     - path: eval/
       hash: md5
-      md5: d442af54c81b35032e292f36d0cc0fbf.dir
-      size: 87522
+      md5: 8f2b50663ec29ff0a04476c47762eecb.dir
+      size: 86094
       nfiles: 6
+  visualise:
+    cmd: python src/visualise.py
+    deps:
+    - path: raw-data
+      hash: md5
+      md5: c53b51bf588447f2042acc579a5e1c5a.dir
+      size: 1407008328
+      nfiles: 2001
+    - path: src/visualise.py
+      hash: md5
+      md5: 1a8033a10cf6958b08020bbc0eeef1f7
+      size: 2442
+    outs:
+    - path: visualise
+      hash: md5
+      md5: 962655808c5e5b887a6f1625d80cc1f7.dir
+      size: 7004384
+      nfiles: 31
