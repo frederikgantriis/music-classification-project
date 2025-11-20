@@ -12,6 +12,7 @@ stages:
     - raw-data
     outs:
     - transformed_data
+    - index_files
   train:
     cmd: python src/train.py
     deps:
