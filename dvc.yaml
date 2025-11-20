@@ -12,7 +12,9 @@ stages:
     - raw-data
     outs:
     - transformed_data
+    - sequences
     - index_files
+    - dict
   train:
     cmd: python src/train.py
     deps:
@@ -30,3 +32,6 @@ metrics:
 plots:
 - eval/plots/metrics:
     x: step
+- eval/plots/images
+params:
+- dict/params.yaml

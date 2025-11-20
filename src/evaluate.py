@@ -1,26 +1,56 @@
 from dvclive.live import Live
-from xgboost import XGBClassifier
 import os
 import pandas as pd
-from sklearn.metrics import accuracy_score, precision_score, f1_score
+from sklearn.metrics import accuracy_score, precision_score, f1_score, confusion_matrix
+from tensorflow.keras.models import load_model
+from dvc.api import params_show
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+
+def translate_numbers(list, params):
+    translated_list = []
+
+    for item in list:
+        translated_list.append(params[item])
+
+    return translated_list
 
 
 def main():
-    loaded_model = XGBClassifier()
-    loaded_model.load_model(os.path.join("models", "model.pkl"))
+    params = params_show()
 
-    X_test = pd.read_csv(os.path.join(
-        "transformed_data", "X_test.csv"), index_col=0)
-    y_test = pd.read_csv(os.path.join(
-        "transformed_data", "y_test.csv"), index_col=0)
+    model_name = params["train"]["model_name"]
 
-    prediction = loaded_model.predict(X_test)
+    dict = params_show("dict/params.yaml")
+
+    model = load_model(f"models/{model_name}.keras")
+
+    dataset = np.load("sequences/test.npz")
+
+    X = dataset["arr_0"]
+    y = dataset["arr_1"].flatten()
+
+    prediction_prob = model.predict(X)
+    prediction = np.argmax(prediction_prob, axis=1)
+
+    prediction_translated = translate_numbers(prediction, dict)
+    y_translated = translate_numbers(y, dict)
+
+    cm = confusion_matrix(y_translated, prediction_translated)
+
+    plt.figure(figsize=(10, 8))
+    sns.heatmap(cm, annot=True, fmt="d", cmap="Blues")
+    plt.xlabel("Predicted")
+    plt.ylabel("True")
+    plt.title("Confusion Matrix")
 
     with Live("eval") as live:
-        live.log_metric("accuracy", accuracy_score(y_test, prediction))
+        live.log_metric("accuracy", accuracy_score(y, prediction))
         live.log_metric("precision", precision_score(
-            y_test, prediction, average="micro"))
-        live.log_metric("f1", f1_score(y_test, prediction, average="micro"))
+            y, prediction, average="micro"))
+        live.log_image("confusion_matrix.png", plt.gcf())
 
 
 if __name__ == "__main__":

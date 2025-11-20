@@ -23,17 +23,27 @@ stages:
       nfiles: 2001
     - path: src/transform.py
       hash: md5
-      md5: 77d6af5b3e62e06893225b6d7c2440d9
-      size: 1689
+      md5: 25d478169b63cea625969e2f91223e8b
+      size: 3895
     outs:
+    - path: dict
+      hash: md5
+      md5: be5a515248321aaf72456bfef25bce06.dir
+      size: 97
+      nfiles: 2
     - path: index_files
       hash: md5
-      md5: ee2553095021329b864e0cfed17e7776.dir
-      size: 26214
-      nfiles: 4
+      md5: d751713988987e9331980363e24189ce.dir
+      size: 0
+      nfiles: 0
+    - path: sequences
+      hash: md5
+      md5: 4d9ea024691f46cd5f64d5ec6fa89c9a.dir
+      size: 2373485411
+      nfiles: 2
     - path: transformed_data
       hash: md5
-      md5: 1ad5fb9667efe72e76ef783768863601.dir
+      md5: 2af800239b034fb392cad9d3826e2423.dir
       size: 1323989016
       nfiles: 1000
   train:
@@ -41,28 +51,28 @@ stages:
     deps:
     - path: src/train.py
       hash: md5
-      md5: 4d31b2ec4bb1d610ea5ede49e3faae40
-      size: 3233
+      md5: f3b9562944718bc6c6f64a8a76e6c4e5
+      size: 3058
     - path: transformed_data
       hash: md5
-      md5: 1ad5fb9667efe72e76ef783768863601.dir
+      md5: 2af800239b034fb392cad9d3826e2423.dir
       size: 1323989016
       nfiles: 1000
     outs:
     - path: models
       hash: md5
-      md5: d751713988987e9331980363e24189ce.dir
-      size: 0
-      nfiles: 0
+      md5: 20444d81cdd7f56722abf75f1bf5b89f.dir
+      size: 357462
+      nfiles: 1
   evaluate:
     cmd: python src/evaluate.py
     deps:
     - path: models
       hash: md5
-      md5: e98d91f34f6ef0195f4e4024e8055d16.dir
-      size: 980126
+      md5: 20444d81cdd7f56722abf75f1bf5b89f.dir
+      size: 357462
       nfiles: 1
     - path: src/evaluate.py
       hash: md5
-      md5: f8a685754903f1fb80d996098bce5d6f
-      size: 841
+      md5: 935ed757aeffab620592acb0ea14358b
+      size: 1537

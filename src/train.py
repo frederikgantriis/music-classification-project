@@ -74,12 +74,18 @@ def create_sequences(features_list, labels, step=1, seq_len=50):
     return np.array(sequences), np.array(seq_labels)
 
 
-def build_model(input_dim=64, seq_len=50):
+def build_model(input_dim=64, seq_len=50, model_name="GRU"):
     """
     Build a simple LSTM model
     """
+
+    options = {
+        "GRU": GRU(64, return_sequences=False, input_shape=(seq_len, input_dim)),
+        "LSTM": LSTM(64, return_sequences=False, input_shape=(seq_len, input_dim)),
+    }
+
     model = Sequential([
-        GRU(64, return_sequences=False, input_shape=(seq_len, input_dim)),
+        options[model_name],
         Dense(32, activation="relu"),
         Dense(10, activation="softmax")     # adjust to your task
     ])
@@ -90,34 +96,24 @@ def build_model(input_dim=64, seq_len=50):
 def main():
     os.makedirs(OUT_FILE, exist_ok=True)
 
-    params = params_show()["train"]
-    seq_length = params["sequence_length"]
-    n_mels = params["n_mels"]
-    stride = params["stride"]
+    params = params_show()
+    seq_length = params["transform"]["seq_length"]
+    model_name = params["train"]["model_name"]
 
-    X_files = pd.read_csv(os.path.join("index_files", "X_train.csv"))
-    y_labels = pd.read_csv(os.path.join("index_files", "y_train.csv"))
-
-    print(X_files)
-    print(y_labels)
-
-    labels = y_labels["label"].values
-
-    folder = os.path.join("transformed_data", "train")
-    features = load_audio_files(folder, n_mels)
-    X, y = create_sequences(features, labels, seq_len=seq_length, step=stride)
-
-    print("FINAL Y", y)
+    dataset = np.load("sequences/train.npz")
+    print(dataset)
+    X = dataset["arr_0"]
+    y = dataset["arr_1"]
 
     print("Final dataset shape:", X.shape)
-    # Example: (1200 sequences, 50 timesteps, 64 features)
 
-    # Dummy target labels for demonstration:
-
-    model = build_model(input_dim=64, seq_len=seq_length)
+    model = build_model(input_dim=64, seq_len=seq_length,
+                        model_name=model_name)
     model.summary()
 
     model.fit(X, y, batch_size=32, epochs=5)
+
+    model.save(f"{OUT_FILE}{model_name}.keras")
 
 
 if __name__ == "__main__":

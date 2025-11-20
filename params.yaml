@@ -1,7 +1,8 @@
 transform:
   test_size: 0.3
-train:
-  example: 10
-  sequence_length: 25
+  seq_length: 25
   n_mels: 64
   stride: 5
+train:
+  example: 10
+  model_name: GRU

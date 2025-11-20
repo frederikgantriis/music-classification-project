@@ -6,3 +6,6 @@ repro:
 
 use_the_force:
   uv run dvc repro --force
+
+exp:
+  uv run dvc exp run
