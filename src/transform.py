@@ -10,9 +10,6 @@ import audioread
 from tqdm import trange
 from dvclive import Live
 
-INDEX_FILE = "index_files/"
-OUT_FILE = "transformed_data/"
-
 
 def load_audio_files(folder, n_mels):
     """
@@ -20,8 +17,10 @@ def load_audio_files(folder, n_mels):
     """
     features = []
 
+    # Create progressbar
     pbar = trange(len(os.listdir(folder)))
 
+    # For each file, load melspectrogram
     for file in os.listdir(folder):
         if file.endswith(".wav"):
             path = os.path.join(folder, file)
@@ -77,6 +76,10 @@ def create_sequences(features_list, labels, step=1, seq_len=50):
 
 
 def process_dataset(X, y, df, n_mels, seq_length, stride, dataset_name):
+    """
+    Load each file, and move it into either train or test folder
+    """
+
     for filename in X:
         label = df.loc[df["filename"] == filename, "label"].iloc[0]
 
@@ -97,25 +100,31 @@ def process_dataset(X, y, df, n_mels, seq_length, stride, dataset_name):
     labels = y["label"].values
 
     folder = os.path.join("transformed_data", dataset_name)
+
+    # Load melspectrogram
     features = load_audio_files(folder, n_mels)
+
+    # Create sequences
     X, y = create_sequences(
         features, labels, seq_len=seq_length, step=stride)
 
+    # Save as numpy objects
     np.savez(os.path.join("sequences", f"{dataset_name}.npz"), X, y)
 
 
 def main():
-    os.makedirs(INDEX_FILE, exist_ok=True)
-    os.makedirs(OUT_FILE + "train/", exist_ok=True)
-    os.makedirs(OUT_FILE + "test/", exist_ok=True)
+    # Make directories for output files
     os.makedirs("sequences/", exist_ok=True)
 
+    # Load parameters
     params = params_show("params.yaml")["transform"]
 
+    # Define each parameter
     n_mels = params["n_mels"]
     seq_length = params["seq_length"]
     stride = params["stride"]
 
+    # Load dataset overview
     df = pd.read_csv(os.path.join(
         "raw-data",
         "features_30_sec.csv"
@@ -128,21 +137,23 @@ def main():
     y['label_int'] = df['label'].astype('category').cat.codes
 
     with Live("dict") as live:
+        # Log all categories
         live.log_params(
             dict(enumerate(y['label'].astype('category').cat.categories)))
 
+    # Define label
     y = y.drop(["label"], axis=1)
     y = y.rename(columns={"label_int": "label"})
 
     # Selecting filename
     X = df["filename"]
 
+    # Split dataset
     X_train, X_test, y_train, y_test = train_test_split(
         X, y, test_size=params["test_size"]
     )
 
-    print(X, y)
-
+    # Process each dataset
     process_dataset(X_train, y_train, df, n_mels, seq_length, stride, "train")
     process_dataset(X_test, y_test, df, n_mels, seq_length, stride, "test")
 

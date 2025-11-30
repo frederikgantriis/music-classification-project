@@ -5,8 +5,8 @@ stages:
     deps:
     - path: src/prepare.sh
       hash: md5
-      md5: 20bcc21a266d984c2f3f4884d58635b9
-      size: 281
+      md5: 3ba316ab3ca185e4c87bce024ffd62e8
+      size: 412
     outs:
     - path: raw-data
       hash: md5
@@ -28,8 +28,8 @@ stages:
     params:
       params.yaml:
         transform.n_mels: 64
-        transform.seq_length: 50
-        transform.stride: 5
+        transform.seq_length: 1500
+        transform.stride: 20
         transform.test_size: 0.3
     outs:
     - path: dict
@@ -37,59 +37,56 @@ stages:
       md5: be5a515248321aaf72456bfef25bce06.dir
       size: 97
       nfiles: 2
-    - path: index_files
-      hash: md5
-      md5: d751713988987e9331980363e24189ce.dir
-      size: 0
-      nfiles: 0
     - path: sequences
       hash: md5
-      md5: 3b691510893b78e1227bd673d6983dc9.dir
-      size: 4682658124
+      md5: 24b8b8f4c9b5c5d5965ee98c935ab77b.dir
+      size: 7310612266
       nfiles: 2
     - path: transformed_data
       hash: md5
-      md5: c1cff220d57026379a52478a0bafebb8.dir
+      md5: ac3ee46ba6d4a425a594bb4d61c0ec1d.dir
       size: 1323989016
       nfiles: 1000
   train:
     cmd: python src/train.py
     deps:
+    - path: sequences
+      hash: md5
+      md5: 24b8b8f4c9b5c5d5965ee98c935ab77b.dir
+      size: 7310612266
+      nfiles: 2
     - path: src/train.py
       hash: md5
-      md5: f3b9562944718bc6c6f64a8a76e6c4e5
-      size: 3058
-    - path: transformed_data
-      hash: md5
-      md5: c1cff220d57026379a52478a0bafebb8.dir
-      size: 1323989016
-      nfiles: 1000
+      md5: 37cd43366c9247f1d788e7016503a9f5
+      size: 4335
     params:
       params.yaml:
-        train.model_name: GRU
+        train.batch_size: 25
+        train.epochs: 20
+        train.model_name: TCN
     outs:
     - path: models
       hash: md5
-      md5: 596559a6e0e28929ddbca42e9678f9c8.dir
-      size: 357462
+      md5: 72fd2dec826716dc37edda853ef10760.dir
+      size: 361646
       nfiles: 1
   evaluate:
     cmd: python src/evaluate.py
     deps:
     - path: models
       hash: md5
-      md5: 596559a6e0e28929ddbca42e9678f9c8.dir
-      size: 357462
+      md5: 72fd2dec826716dc37edda853ef10760.dir
+      size: 361646
       nfiles: 1
     - path: src/evaluate.py
       hash: md5
-      md5: 526e3cb3a28e95254556389adce5bc75
-      size: 1661
+      md5: b0b1ca16c2706c720d05a7afc2297d5d
+      size: 1607
     outs:
     - path: eval/
       hash: md5
-      md5: 8f2b50663ec29ff0a04476c47762eecb.dir
-      size: 86094
+      md5: af0277d80c4c1e31414659e128fae605.dir
+      size: 62100
       nfiles: 6
   visualise:
     cmd: python src/visualise.py
@@ -101,8 +98,8 @@ stages:
       nfiles: 2001
     - path: src/visualise.py
       hash: md5
-      md5: 1a8033a10cf6958b08020bbc0eeef1f7
-      size: 2442
+      md5: edd6cdec08db0852c6df08fd3ae14daa
+      size: 2468
     outs:
     - path: visualise
       hash: md5

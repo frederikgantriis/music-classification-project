@@ -20,20 +20,20 @@ stages:
     - transform.n_mels
     - transform.stride
     deps:
-    - src/transform.py
     - raw-data
     outs:
-    - transformed_data
-    - sequences
-    - index_files
+    - sequences:
+        cache: false
     - dict
   train:
     cmd: python src/train.py
     params:
     - train.model_name
+    - train.epochs
+    - train.batch_size
     deps:
     - src/train.py
-    - transformed_data
+    - sequences
     outs:
     - models
   evaluate:
@@ -46,9 +46,9 @@ stages:
 metrics:
 - eval/metrics.json
 plots:
+- visualise/plots/images
 - eval/plots/metrics:
     x: step
 - eval/plots/images
-- visualise/plots/images
 params:
 - dict/params.yaml

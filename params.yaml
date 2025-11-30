@@ -1,7 +1,9 @@
 transform:
   test_size: 0.3
-  seq_length: 25
+  seq_length: 1500
   n_mels: 64
-  stride: 5
+  stride: 20
 train:
-  model_name: LSTM
+  model_name: TCN
+  epochs: 20
+  batch_size: 25

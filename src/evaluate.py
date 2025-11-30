@@ -9,36 +9,31 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 
 
-def translate_numbers(list, params):
-    translated_list = []
-
-    for item in list:
-        translated_list.append(params[item])
-
-    return translated_list
-
-
 def main():
+    # Load parameters
     params = params_show()
 
+    # Load modelname
     model_name = params["train"]["model_name"]
 
-    dict = params_show("dict/params.yaml")
-
+    # Load model
     model = load_model(f"models/{model_name}.keras")
 
+    # Load test dataset
     dataset = np.load("sequences/test.npz")
 
+    # Load x and y
     X = dataset["arr_0"]
     y = dataset["arr_1"].flatten()
 
+    # Get predictions
     prediction_prob = model.predict(X)
+
+    # Convert predictions to the prediction with the highest probability
     prediction = np.argmax(prediction_prob, axis=1)
 
-    prediction_translated = translate_numbers(prediction, dict)
-    y_translated = translate_numbers(y, dict)
-
-    cm = confusion_matrix(y_translated, prediction_translated)
+    # Create confusion matrix
+    cm = confusion_matrix(y, prediction)
 
     plt.figure(figsize=(10, 8))
     sns.heatmap(cm, annot=True, fmt="d", cmap="Blues")
@@ -47,11 +42,14 @@ def main():
     plt.title("Confusion Matrix")
 
     with Live("eval") as live:
+        # Log metrics
         live.log_metric("accuracy", accuracy_score(y, prediction))
         live.log_metric("precision", precision_score(
             y, prediction, average="macro"))
         live.log_metric("F1 Score", f1_score(y, prediction, average="macro"))
         live.log_metric("recall", recall_score(y, prediction, average="macro"))
+
+        # Log confusion matrix
         live.log_image("confusion_matrix.png", plt.gcf())
 
 

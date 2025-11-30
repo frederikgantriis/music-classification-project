@@ -7,7 +7,6 @@ from dvclive.live import Live
 
 
 def get_waveform(filename, y, sr):
-    # ---- 1. Waveform ----
     plt.figure(figsize=(12, 4))
     librosa.display.waveshow(y, sr=sr)
     plt.title(f"Waveform {filename}")
@@ -19,7 +18,6 @@ def get_waveform(filename, y, sr):
 
 
 def get_spectrogram(filename, y, sr):
-    # ---- 2. Spectrogram ----
     D = np.abs(librosa.stft(y))
     DB = librosa.amplitude_to_db(D, ref=np.max)
 
@@ -33,7 +31,6 @@ def get_spectrogram(filename, y, sr):
 
 
 def get_mel_spectrogram(filename, y, sr):
-    # ---- 3. Mel-Spectrogram ----
     mel = librosa.feature.melspectrogram(y=y, sr=sr, n_mels=64)
     mel_db = librosa.power_to_db(mel, ref=np.max)
 
@@ -49,6 +46,7 @@ def get_mel_spectrogram(filename, y, sr):
 def main():
     base_url = os.path.join("raw-data", "genres_original")
 
+    # Load varies examples
     filenames = [
         os.path.join(base_url, "classical", "classical.00000.wav"),
         os.path.join(base_url, "blues", "blues.00000.wav"),
@@ -66,10 +64,15 @@ def main():
         for filename in filenames:
             y, sr = librosa.load(filename, sr=None)
 
+            # Log waveform
             live.log_image(f"{filename}-waveform.png",
                            get_waveform(filename, y, sr))
+
+            # Log spectrogram
             live.log_image(f"{filename}-spectrogram.png",
                            get_spectrogram(filename, y, sr))
+
+            # Log mel-spectrogram
             live.log_image(f"{filename}-mel_spectrogram.png",
                            get_mel_spectrogram(filename, y, sr))
 
