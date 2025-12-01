@@ -18,13 +18,13 @@ stages:
     deps:
     - path: raw-data
       hash: md5
-      md5: c53b51bf588447f2042acc579a5e1c5a.dir
-      size: 1407008328
-      nfiles: 2001
+      md5: ff899c2b944b49973bc9aa3b79efb5eb.dir
+      size: 1405800736
+      nfiles: 2000
     - path: src/transform.py
       hash: md5
-      md5: 25d478169b63cea625969e2f91223e8b
-      size: 3895
+      md5: 217fadc8b5f7b43ce9ea1fa9c43078fb
+      size: 1698
     params:
       params.yaml:
         transform.n_mels: 64
@@ -39,26 +39,21 @@ stages:
       nfiles: 2
     - path: sequences
       hash: md5
-      md5: 24b8b8f4c9b5c5d5965ee98c935ab77b.dir
+      md5: d2b0eca67165b6589331deadfac13dbd.dir
       size: 7310612266
       nfiles: 2
-    - path: transformed_data
-      hash: md5
-      md5: ac3ee46ba6d4a425a594bb4d61c0ec1d.dir
-      size: 1323989016
-      nfiles: 1000
   train:
     cmd: python src/train.py
     deps:
     - path: sequences
       hash: md5
-      md5: 24b8b8f4c9b5c5d5965ee98c935ab77b.dir
+      md5: d2b0eca67165b6589331deadfac13dbd.dir
       size: 7310612266
       nfiles: 2
     - path: src/train.py
       hash: md5
-      md5: 37cd43366c9247f1d788e7016503a9f5
-      size: 4335
+      md5: a79f1c1985b02518f5ec990fb562c0a1
+      size: 2680
     params:
       params.yaml:
         train.batch_size: 25
@@ -67,16 +62,16 @@ stages:
     outs:
     - path: models
       hash: md5
-      md5: 72fd2dec826716dc37edda853ef10760.dir
-      size: 361646
+      md5: 1c9932b0c7182a75a99a4066f97558ad.dir
+      size: 363801
       nfiles: 1
   evaluate:
     cmd: python src/evaluate.py
     deps:
     - path: models
       hash: md5
-      md5: 72fd2dec826716dc37edda853ef10760.dir
-      size: 361646
+      md5: 1c9932b0c7182a75a99a4066f97558ad.dir
+      size: 363801
       nfiles: 1
     - path: src/evaluate.py
       hash: md5
@@ -85,8 +80,8 @@ stages:
     outs:
     - path: eval/
       hash: md5
-      md5: af0277d80c4c1e31414659e128fae605.dir
-      size: 62100
+      md5: 60c05d85c15146dae4fbaeb8c9ab7872.dir
+      size: 46145
       nfiles: 6
   visualise:
     cmd: python src/visualise.py
@@ -98,8 +93,8 @@ stages:
       nfiles: 2001
     - path: src/visualise.py
       hash: md5
-      md5: edd6cdec08db0852c6df08fd3ae14daa
-      size: 2468
+      md5: 047722b0301d0e7be48100381def6703
+      size: 2591
     outs:
     - path: visualise
       hash: md5

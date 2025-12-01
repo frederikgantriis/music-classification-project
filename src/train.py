@@ -1,8 +1,6 @@
 import os
 from dvc.api import params_show
-import pandas as pd
 import numpy as np
-import librosa
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import (
     GRU,
@@ -11,76 +9,12 @@ from tensorflow.keras.layers import (
     Dense,
     Conv1D,
     MaxPooling1D,
-    GlobalAveragePooling1D
+    GlobalAveragePooling1D,
+    Dropout
 )
-import tensorflow.keras as keras
-import audioread
-from tqdm import trange
 
 IN_FILE = "transformed_data/"
 OUT_FILE = "models/"
-
-
-def load_audio_files(folder, n_mels):
-    """
-    Load audio files, load spectrogram and return
-    """
-    features = []
-
-    pbar = trange(len(os.listdir(folder)))
-
-    for file in os.listdir(folder):
-        if file.endswith(".wav"):
-            path = os.path.join(folder, file)
-
-            pbar.set_description(f"Working on {path}")
-
-            try:
-                # Load audio
-                audio, sr = librosa.load(path, sr=16000, mono=True)
-                # Extract mel spectrogram (time x features)
-                mel = librosa.feature.melspectrogram(
-                    y=audio,
-                    sr=sr,
-                    n_mels=n_mels,
-                    hop_length=256
-                )
-
-                # Convert to log scale
-                mel = librosa.power_to_db(mel).T  # shape: (timesteps, 64)
-
-                features.append(mel)
-            except audioread.exceptions.NoBackendError:
-                print("Skipping", path, ": Corrupt File Error")
-
-            pbar.update()
-
-    pbar.close()
-
-    return features
-
-
-def create_sequences(features_list, labels, step=1, seq_len=50):
-    """
-    Split each file's feature matrix into sequences
-    """
-    sequences = []
-    seq_labels = []
-
-    pbar = trange(len(features_list))
-
-    for feat, label in zip(features_list, labels):
-        for i in range(0, len(feat) - seq_len, step):
-            seq = feat[i:i + seq_len]
-            sequences.append(seq)
-            seq_labels.append(label)
-
-        pbar.update()
-
-    # (num_sequences, seq_len, 64)
-
-    pbar.close()
-    return np.array(sequences), np.array(seq_labels)
 
 
 def build_model(input_dim=64, seq_len=50, model_name="GRU"):
@@ -107,12 +41,14 @@ def build_model(input_dim=64, seq_len=50, model_name="GRU"):
         "TCN": Sequential([
             Conv1D(64, 3, dilation_rate=1, padding="causal",
                    activation="relu", input_shape=(seq_len, input_dim)),
+            Dropout(0.3),
             Conv1D(64, 3, dilation_rate=2, padding="causal", activation="relu"),
             GlobalAveragePooling1D(),
         ]),
 
         "MLP_Mixer": Sequential([
             Dense(128, activation="gelu", input_shape=(seq_len, input_dim)),
+            Dropout(0.3),
             Dense(128, activation="gelu"),
             GlobalAveragePooling1D(),
         ])

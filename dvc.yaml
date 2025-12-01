@@ -21,6 +21,7 @@ stages:
     - transform.stride
     deps:
     - raw-data
+    - src/transform.py
     outs:
     - sequences:
         cache: false

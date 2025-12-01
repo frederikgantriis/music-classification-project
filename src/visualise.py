@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import os
 from dvclive.live import Live
+from dvc.api import params_show
 
 
 def get_waveform(filename, y, sr):
@@ -30,8 +31,8 @@ def get_spectrogram(filename, y, sr):
     return plt.gcf()
 
 
-def get_mel_spectrogram(filename, y, sr):
-    mel = librosa.feature.melspectrogram(y=y, sr=sr, n_mels=64)
+def get_mel_spectrogram(filename, y, sr, n_mels):
+    mel = librosa.feature.melspectrogram(y=y, sr=sr, n_mels=n_mels)
     mel_db = librosa.power_to_db(mel, ref=np.max)
 
     plt.figure(figsize=(12, 4))
@@ -45,6 +46,9 @@ def get_mel_spectrogram(filename, y, sr):
 
 def main():
     base_url = os.path.join("raw-data", "genres_original")
+
+    params = params_show()["transform"]
+    n_mels = params["n_mels"]
 
     # Load varies examples
     filenames = [
@@ -74,7 +78,7 @@ def main():
 
             # Log mel-spectrogram
             live.log_image(f"{filename}-mel_spectrogram.png",
-                           get_mel_spectrogram(filename, y, sr))
+                           get_mel_spectrogram(filename, y, sr, n_mels))
 
 
 if __name__ == "__main__":
