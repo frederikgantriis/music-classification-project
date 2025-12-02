@@ -12,6 +12,8 @@ from tensorflow.keras.layers import (
     GlobalAveragePooling1D,
     Dropout
 )
+from codecarbon import EmissionsTracker
+from dvclive.live import Live
 
 IN_FILE = "transformed_data/"
 OUT_FILE = "models/"
@@ -85,9 +87,18 @@ def main():
                         model_name=model_name)
     model.summary()
 
+    tracker = EmissionsTracker()
+
+    tracker.start()
+
     model.fit(X, y, batch_size=batch_size, epochs=epochs)
 
+    emissions = tracker.stop()
+
     model.save(f"{OUT_FILE}{model_name}.keras")
+
+    with Live("emissions") as live:
+        live.log_param("CO2", emissions)
 
 
 if __name__ == "__main__":
