@@ -23,23 +23,24 @@ def build_model(input_dim=64, seq_len=50, model_name="GRU"):
     """
 
     options = {
-        "GRU": GRU(64, return_sequences=False, input_shape=(seq_len, input_dim)),
-        "LSTM": LSTM(64, return_sequences=False, input_shape=(seq_len, input_dim)),
+        "GRU": GRU(128, return_sequences=False, input_shape=(seq_len, input_dim)),
+        "LSTM": LSTM(128, return_sequences=False, input_shape=(seq_len, input_dim)),
 
-        "BiGRU": Bidirectional(GRU(64, return_sequences=False,
+        "BiGRU": Bidirectional(GRU(128, return_sequences=False,
                                input_shape=(seq_len, input_dim))),
-        "BiLSTM": Bidirectional(LSTM(64, return_sequences=False,
+        "BiLSTM": Bidirectional(LSTM(128, return_sequences=False,
                                      input_shape=(seq_len, input_dim))),
 
         "Conv1D": Sequential([
-            Conv1D(64, 5, activation="relu", input_shape=(seq_len, input_dim)),
+            Conv1D(128, 5, activation="relu",
+                   input_shape=(seq_len, input_dim)),
             MaxPooling1D(2),
             Conv1D(128, 5, activation="relu"),
             GlobalAveragePooling1D(),
         ]),
 
         "TCN": Sequential([
-            Conv1D(64, 3, dilation_rate=1, padding="causal",
+            Conv1D(128, 3, dilation_rate=1, padding="causal",
                    activation="relu", input_shape=(seq_len, input_dim)),
             Dropout(0.3),
             Conv1D(64, 3, dilation_rate=2, padding="causal", activation="relu"),

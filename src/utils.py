@@ -37,6 +37,9 @@ def load_audio_files(folder, filenames, n_mels):
             # Convert to log scale
             mel = librosa.power_to_db(mel).T  # shape: (timesteps, 64)
 
+            # Scaling the input
+            mel = (mel - mel.mean()) / (mel.std() + 1e-6)
+
             features.append(mel)
         except audioread.exceptions.NoBackendError:
             print("Skipping", path, ": Corrupt File Error")
