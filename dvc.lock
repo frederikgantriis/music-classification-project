@@ -39,21 +39,21 @@ stages:
       nfiles: 2
     - path: sequences
       hash: md5
-      md5: 7428cee864f9cedbf4576c4fc13500b3.dir
-      size: 14621204266
+      md5: 54d2147392c1ed56866c3df3277e5711.dir
+      size: 7470494881
       nfiles: 2
   train:
     cmd: python src/train.py
     deps:
     - path: sequences
       hash: md5
-      md5: 7428cee864f9cedbf4576c4fc13500b3.dir
-      size: 14621204266
+      md5: 54d2147392c1ed56866c3df3277e5711.dir
+      size: 7470494881
       nfiles: 2
     - path: src/train.py
       hash: md5
-      md5: 8a4a29825982cea231519eccb55692d6
-      size: 2705
+      md5: a2bcfee4afc5552ed29afe2d265eeb8d
+      size: 2938
     params:
       params.yaml:
         train.batch_size: 25
@@ -62,16 +62,16 @@ stages:
     outs:
     - path: models
       hash: md5
-      md5: 88deb31c30e4b481b8bc95f63116e976.dir
-      size: 2520007
+      md5: 8bc917c209349bdd2ae178222867eb7a.dir
+      size: 9714631
       nfiles: 1
   evaluate:
     cmd: python src/evaluate.py
     deps:
     - path: models
       hash: md5
-      md5: 88deb31c30e4b481b8bc95f63116e976.dir
-      size: 2520007
+      md5: 8bc917c209349bdd2ae178222867eb7a.dir
+      size: 9714631
       nfiles: 1
     - path: src/evaluate.py
       hash: md5
@@ -80,8 +80,8 @@ stages:
     outs:
     - path: eval/
       hash: md5
-      md5: 7489751baf226da0e29bbb90cf596283.dir
-      size: 49376
+      md5: 0fef32256bfd46cc469da0c70ca21cd4.dir
+      size: 39300
       nfiles: 6
   visualise:
     cmd: python src/visualise.py
