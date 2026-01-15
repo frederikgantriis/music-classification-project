@@ -71,7 +71,7 @@ Furthermore, the models didn't get any better by making the sequences longer, wh
 
 After, this observation, I inspected the transformation step. Here, a major error was noticed. Limited by my knowledge of working with audio-files, I had - when extracting audio-files and its labels - made an error that meant that the audio-file didn't match the label. This meant, that labels where shuffled and the models would then not have any chance of classifying images properly.
 
-After fixing this error, accuracy when from 0.1% to 0.65%.
+After fixing this error, accuracy when from 0.1% to 0.65%. After further adjustments, I ended up with an accuracy of +70%
 
 This problem means that the time for final testing were quite limited, and there is room for improvement. However, with this knowledge, let us move on to the evaluation.
 
@@ -79,7 +79,7 @@ This problem means that the time for final testing were quite limited, and there
 
 Firstly, let's take a look at a confusion matrix for the best performing model:
 
-![confusion](eval/plots/images/confusion_matrix.png)
+![confusion](confusion_matrix.png)
 
 It should be noted, that the order correspond to the order given at the start of this file.
 
@@ -87,11 +87,12 @@ In general, the models are quite good at classifying classical music. A reason f
 
 If we look at the mel-spectrogram for disco for instance, there seems to be a clear sense of beat with space in between:
 
-![disco](visualise/plots/images/raw-data/genres_original/disco/disco.00000.wav-mel_spectrogram.png)
+![disco](genres_original/disco/disco.00000.wav-mel_spectrogram.png)
 
 If we then look at classical music, the same sense of beat can be hard to identify:
 
-![classical](visualise/plots/images/raw-data/genres_original/classical/classical.00000.wav-mel_spectrogram.png)
-There doesn't seem to be any kind of beat, or repeated patterns that are obvious from the disco example.
+![classical](genres_original/classical/classical.00000.wav-mel_spectrogram.png)
+
+There doesn't seem to be any kind of beat, or repeated patterns that are obvious from the disco example. The same is true for metal. Some models were quite good at classifying metal, since it doesn't have a clear sense of beat.
 
 Furthermore, it seems that disco is often misclassified as pop, reggae and rock. From a musical standpoint, it makes sense that disco is closer to pop, reggae and rock than jazz, classical and metal. This misclassification could be due to inconsistencies in the dataset. A model can only be as good as the data it is trained on, and different people might classify some tracks as disco while others would classify it as pop. In addition, the classes are mainly focused on popular music. For instance, only one category is selected for jazz. In this category, there can be a large variety in music from the 1920's to the music from today.

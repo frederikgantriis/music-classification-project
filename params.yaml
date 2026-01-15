@@ -5,5 +5,5 @@ transform:
   stride: 20
 train:
   model_name: BiGRU
-  epochs: 20
+  epochs: 10
   batch_size: 25

@@ -39,8 +39,8 @@ stages:
       nfiles: 2
     - path: sequences
       hash: md5
-      md5: 54d2147392c1ed56866c3df3277e5711.dir
-      size: 7470494881
+      md5: 15a77a5bbfdd87dd67266d3230506f1f.dir
+      size: 14621204266
       nfiles: 2
   train:
     cmd: python src/train.py

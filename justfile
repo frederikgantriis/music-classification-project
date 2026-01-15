@@ -9,3 +9,6 @@ use_the_force:
 
 exp:
   uv run dvc exp run
+
+dag:
+  uvx dvc dag

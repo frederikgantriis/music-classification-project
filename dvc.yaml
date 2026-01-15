@@ -6,14 +6,14 @@ stages:
     outs:
     - raw-data
   visualise:
-    cmd: python src/visualise.py
+    cmd: uv run src/visualise.py
     deps:
     - raw-data
     - src/visualise.py
     outs:
     - visualise
   transform:
-    cmd: python src/transform.py
+    cmd: uv run src/transform.py
     params:
     - transform.test_size
     - transform.seq_length
@@ -23,11 +23,10 @@ stages:
     - raw-data
     - src/transform.py
     outs:
-    - sequences:
-        cache: false
+    - sequences
     - dict
   train:
-    cmd: python src/train.py
+    cmd: uv run src/train.py
     params:
     - train.model_name
     - train.epochs
@@ -38,7 +37,7 @@ stages:
     outs:
     - models
   evaluate:
-    cmd: python src/evaluate.py
+    cmd: uv run src/evaluate.py
     deps:
     - models
     - src/evaluate.py

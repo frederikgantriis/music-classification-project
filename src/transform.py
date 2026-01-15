@@ -14,6 +14,7 @@ def main():
     os.makedirs(OUT_FILE + "train/", exist_ok=True)
     os.makedirs(OUT_FILE + "test/", exist_ok=True)
 
+    # Remove corrupt file
     os.remove(os.path.join("raw-data", "genres_original",
               "jazz", "jazz.00054.wav"))
 
@@ -31,6 +32,7 @@ def main():
         "features_30_sec.csv"
     ))
 
+    # Remove corrupt file
     df = df[df["filename"] != "jazz.00054.wav"]
 
     # Selecting labels
