@@ -19,10 +19,10 @@ TODO: INSERT DISTRIBUTION OF THE CLASSES
 
 Furhtermore, the following images show a representation of the waveform, spectrogram and mel-spectrogram of the blues class:
 
-![blues](visualise/plots/images/raw-data/genres_original/blues/blues.00000.wav-mel_spectrogram.png)
-![blues](visualise/plots/images/raw-data/genres_original/blues/blues.00000.wav-spectrogram.png)
-![blues](visualise/plots/images/raw-data/genres_original/blues/blues.00000.wav-waveform.png)
-All other images can be found in [this folder](visualise/plots/images/raw-data/genres_original/)
+![blues](genres_original/blues/blues.00000.wav-mel_spectrogram.png)
+![blues](genres_original/blues/blues.00000.wav-spectrogram.png)
+![blues](genres_original/blues/blues.00000.wav-waveform.png)
+All other images can be found in [this folder](genres_original/)
 
 ## The pipeline
 
